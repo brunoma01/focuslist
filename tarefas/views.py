@@ -6,6 +6,8 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login
+from django.utils import timezone
+from datetime import datetime
 
 @login_required
 def home(request):
@@ -33,6 +35,7 @@ def home(request):
         'remaining': remaining_tasks,
         'pct': pct,
         'filter': filter_type,
+        'now': timezone.now(),
     })
 
 @require_POST
@@ -42,6 +45,17 @@ def add(request):
     if form.is_valid():
         task = form.save(commit=False)
         task.user = request.user
+
+        label = request.POST.get('label')
+        if label:
+            task.label = label.strip().capitalize()
+
+        due_date_str = request.POST.get('due_date')
+
+        if due_date_str:
+            naive_dt = datetime.fromisoformat(due_date_str)
+            task.due_date = timezone.make_aware(naive_dt)
+
         task.save()
 
         messages.success(request, 'Tarefa adicionada com sucesso!')

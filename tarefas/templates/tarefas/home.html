@@ -12,9 +12,16 @@
     <div class="progress-count">{{ completed }}/{{ total }}</div>
 </div>
 
+<!-- add new task -->
+
 <form class="task-form" method="POST" action="{% url 'add' %}">
     {% csrf_token %}
     <input name="label" type="text" placeholder="Digite uma tarefa..." required autofocus />
+
+    <div class="due-date-row">
+        <label for="due_date">Data limite:</label>
+        <input name="due_date" type="datetime-local" id="due_date" />
+    </div>
     <button type="submit">Adicionar</button>
 </form>
 
@@ -27,7 +34,13 @@
 {% if tasks %}
 <ul class="task-list">
     {% for task in tasks %}
-    <li class="{% if task.done %}completed{% endif %}">
+    <li class="
+        {% if task.done %}completed{% endif %}
+        {% if task.due_date and task.due_date < now and not task.done %}overdue{% endif %}
+    ">
+
+        <!-- Toggle task completion -->
+
         <form method="POST" action="{% url 'toggle' task.id %}">
             {% csrf_token %}
             <input type="checkbox" aria-label="Marcar como concluída"
@@ -40,14 +53,29 @@
                 {{ task.label }}
             </span>
 
+            <small class="task-date">
+                criada em: {{ task.created_at|date:"d/m/Y H:i" }}
+            </small>
+
+            {% if task.due_date %}
+                <small class="task-date">
+                    vence em: {{ task.due_date|date:"d/m/Y H:i" }}
+                </small>
+            {% endif %}
+
+            {% if task.due_date and task.due_date < now and not task.done %}
+                <small class="task-date overdue-text" style="color: #ef4444;">
+                    (atrasada)
+                </small>
+            {% endif %}
+
+            <!-- Edit tasks -->
+
             <form method="POST" action="{% url 'edit' task.id %}" class="edit-form hidden">
                 {% csrf_token %}
                 <input type="text" name="label" value="{{ task.label }}" class="edit-input" required />
             </form>
 
-            <small class="task-date">
-                {{ task.created_at|date:"d/m/Y H:i" }}
-            </small>
         </div>
         <button type="button" class="edit-btn" onclick="startEdit(this)">✏️</button>
         <form method="POST" action="{% url 'delete' task.id %}">
@@ -57,10 +85,14 @@
     </li>
     {% endfor %}
 </ul>
+
+<!-- Clear completed tasks -->
+
 <form method="POST" action="{% url 'clear_completed' %}">
     {% csrf_token %}
     <button type="button" class="clear-btn" onclick="openModal()">Limpar concluídas</button>
 </form>
+
 <p class="footer">faltam {{ remaining }} tarefa{% if remaining != 1 %}s{% endif %} • Bora!!</p>
 <p class="createby">by Bruno Machado</p>
 {% else %}

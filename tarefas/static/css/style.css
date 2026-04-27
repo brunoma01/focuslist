@@ -7,6 +7,10 @@
     --secondary-color: #1f2937;
 }
 
+*{
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -172,7 +176,8 @@ body {
 
 .task-form {
     display: flex;
-    gap: 8px;
+    flex-direction: column;
+    gap: 10px;
     margin-bottom: 20px;
     background-color: var(--secondary-color);
     padding: 10px;
@@ -185,7 +190,7 @@ body {
     flex: 1;
     background-color: transparent;
     border: none;
-    padding: 10px;
+    padding: 10px 12px;
     color: #d1d5db;
     font-size: 16px;
     outline: none;
@@ -196,6 +201,8 @@ body {
 }
 
 .task-form button {
+    width: 100%;
+    height: 40px;
     background-color: var(--primary-color);
     color: white;
     flex-shrink: 0;
@@ -213,6 +220,65 @@ body {
 .task-form:focus-within {
     border-color: var(--primary-color);
     box-shadow: 0 0 10px rgba(22,177,249,0.2);
+}
+
+.due-date-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+#due_date {
+    cursor: pointer;
+}
+
+#due_date:hover {
+    border-color: var(--primary-color);
+}
+
+.due-date-row input {
+    background: transparent;
+    border: 1px solid #344051;
+    border-radius: 6px;
+    padding: 6px;
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+.due-date-row input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.task-form input[type="datetime-local"] {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #344051;
+    border-radius: 6px;
+    padding: 10px;
+    color: #d1d5db;
+    font-size: 14px;
+}
+
+.task-form input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.due-date-row label {
+    padding-left: 12px;
+}
+
+.overdue {
+    border-color: #ef4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+}
+
+.overdue .task-title {
+    color: #ef4444;
 }
 
 .task-list {

@@ -1,3 +1,5 @@
+const dueInput = document.getElementById('due_date');
+
 function openModal() {
     document.getElementById('confirmModal').style.display = 'flex';
 }
@@ -83,3 +85,11 @@ document.querySelectorAll('.edit-input').forEach(input => {
         }
     });
 });
+
+if (dueInput) {
+    dueInput.addEventListener('click', function() {
+        if (this.showPicker) {
+            this.showPicker();
+        }
+    });
+}
