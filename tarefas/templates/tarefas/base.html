@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock %} - bma-tarefas</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">FocusList</h1>
+        <p class="date">Foque no que importa.</p>
+        {% if request.user.is_authenticated %}
+        <div class="user-bar">
+            <span class="user-info">
+                Olá, <strong>{{ request.user.username }}</strong>
+            </span>
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+{% endif %}
+
+        {% block body %}
+        {% endblock %}
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="toast {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <p>Tem certeza que deseja remover todas as tarefas concluídas?</p>
+
+            <div class="modal-actions">
+                <button onclick="closeModal()" class="cancel-btn">Cancelar</button>
+                
+                <form method="POST" action="{% url 'clear_completed' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="confirm-btn">Sim, limpar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+
+</html>

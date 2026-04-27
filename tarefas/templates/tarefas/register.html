@@ -1,0 +1,25 @@
+{% extends 'tarefas/base.html' %}
+
+{% block title %}Cadastro{% endblock %}
+
+{% block body %}
+
+<div class="auth-box">
+    <h2>Cadastrar</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="username" placeholder="Usuário" required>
+        <input type="password" name="password" placeholder="Senha" required>
+        <input type="password" name="confirm" placeholder="Confirmar Senha" required>
+
+        <button type="submit" class="primary-btn">Registrar</button>
+    </form>
+
+    <p class="auth-link">
+        Já tem conta? <a href="{% url 'login' %}">Entrar</a>
+    </p>
+</div>
+
+{% endblock %}
