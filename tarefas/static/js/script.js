@@ -68,7 +68,7 @@ document.addEventListener('click', function(e) {
             const li = form.closest('li');
 
             if (!li.contains(e.target)) {
-                cancelEdit(form);
+                form.submit();
             }
         }
     });
@@ -76,10 +76,6 @@ document.addEventListener('click', function(e) {
 
 document.querySelectorAll('.edit-input').forEach(input => {
     input.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            this.form.submit();
-        }
-
         if (e.key === 'Escape') {
             cancelEdit(this.closest('form'));
         }

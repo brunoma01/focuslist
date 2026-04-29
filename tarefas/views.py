@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.utils import timezone
 from datetime import datetime
+from django.utils.timezone import now
 
 @login_required
 def home(request):
@@ -19,12 +20,15 @@ def home(request):
         tasks = all_tasks.filter(done=True)
     elif filter_type == 'pending':
         tasks = all_tasks.filter(done=False)
+    elif filter_type == 'overdue':
+        tasks = all_tasks.filter(due_date__lt=now(), done=False)
     else:
         tasks = all_tasks
 
     total_tasks = all_tasks.count()
     completed_tasks = all_tasks.filter(done=True).count()
     remaining_tasks = total_tasks - completed_tasks
+    overdue_count = all_tasks.filter(due_date__lt=now(), done=False).count()
 
     pct = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 0
 
@@ -36,6 +40,7 @@ def home(request):
         'pct': pct,
         'filter': filter_type,
         'now': timezone.now(),
+        'overdue_count': overdue_count,
     })
 
 @require_POST

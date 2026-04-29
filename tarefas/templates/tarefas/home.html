@@ -26,9 +26,10 @@
 </form>
 
 <div class="filters">
-    <a href="?filter=all" class="{% if filter == 'all' %}active{% endif %}">Todas</a>
-    <a href="?filter=pending" class="{% if filter == 'pending' %}active{% endif %}">Pendentes</a>
-    <a href="?filter=done" class="{% if filter == 'done' %}active{% endif %}">Concluídas</a>
+    <a href="?filter=all" class="{% if filter == 'all' %}active{% endif %}">Todas({{ total }})</a>
+    <a href="?filter=pending" class="{% if filter == 'pending' %}active{% endif %}">Pendentes({{ remaining }})</a>
+    <a href="?filter=overdue" class="{% if filter == 'overdue' %}active{% endif %}">Atrasadas({{ overdue_count }})</a>
+    <a href="?filter=done" class="{% if filter == 'done' %}active{% endif %}">Concluídas({{ completed }})</a>
 </div>
 
 {% if tasks %}
@@ -74,6 +75,7 @@
             <form method="POST" action="{% url 'edit' task.id %}" class="edit-form hidden">
                 {% csrf_token %}
                 <input type="text" name="label" value="{{ task.label }}" class="edit-input" required />
+                <button type="submit" hidden></button>
             </form>
 
         </div>
