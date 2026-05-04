@@ -122,9 +122,13 @@ def clear_completed(request):
 
 def register(request):
     if request.method == 'POST':
+        first_name = request.POST.get('first_name')
         username = request.POST.get('username')
         password = request.POST.get('password')
         confirm = request.POST.get('confirm')
+
+        if first_name:
+            first_name = first_name.strip().capitalize()
 
         if password != confirm:
             messages.error(request, 'As senhas não coincidem')
@@ -134,9 +138,9 @@ def register(request):
             messages.error(request, 'Usuário já existe')
             return redirect('register')
 
-        user = User.objects.create_user(username=username, password=password)
+        user = User.objects.create_user(username=username, password=password, first_name=first_name)
         login(request, user)
-        messages.success(request, f'Bem-vindo, {username}! Sua conta foi criada com sucesso.')
+        messages.success(request, f'Bem-vindo, {first_name}! Sua conta foi criada com sucesso.')
 
         return redirect('home')
 
