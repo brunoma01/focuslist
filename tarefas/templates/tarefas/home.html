@@ -103,6 +103,14 @@
 <p class="footer">faltam {{ remaining }} tarefa{% if remaining != 1 %}s{% endif %} • Bora!!</p>
 <p class="createby">by Bruno Machado</p>
 {% else %}
-<p class="footer">Nenhuma tarefa ainda. Comece adicionando sua primeira!</p>
+    {% if filter == 'all' %}
+        <p class="footer">Nenhuma tarefa ainda. Comece adicionando sua primeira! 🚀</p>
+    {% elif filter == 'pending' %}
+        <p class="footer">Nenhuma tarefa pendente 🎉</p>
+    {% elif filter == 'done' %}
+        <p class="footer">Nenhuma tarefa concluída ainda.</p>
+    {% elif filter == 'overdue' %}
+        <p class="footer">Nenhuma tarefa atrasada. Tudo em dia! 😎🔥</p>
+    {% endif %}
 {% endif %}
 {% endblock %}
