@@ -21,23 +21,39 @@ function startEdit(button) {
     title.classList.add('hidden');
     form.classList.remove('hidden');
 
-    const input = form.querySelector('input');
+    const input = form.querySelector('input[name="label"]');
+    const dateInput = form.querySelector('input[name="due_date"]');
+
+    form.dataset.submitted = "false";
+
+    function submitForm() {
+        if (form.dataset.submitted === "false") {
+            form.dataset.submitted = "true";
+            form.submit();
+        }
+    }
+
     input.focus();
     input.select();
+
+    input.addEventListener('blur', submitForm);
+    dateInput.addEventListener('blur', submitForm);
+
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            submitForm();
+        }
+    });
 }
 
 function cancelEdit(form) {
+    if (form.dataset.submitted === "true") return;
+
     const li = form.closest('li');
-
     const title = li.querySelector('.task-title');
-    const input = form.querySelector('input');
-
-    input.value = title.innerText;
 
     form.classList.add('hidden');
     title.classList.remove('hidden');
-
-    input.blur();
 }
 
 document.addEventListener('click', function(event) {

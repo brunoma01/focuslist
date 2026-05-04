@@ -9,6 +9,7 @@ from django.contrib.auth import login
 from django.utils import timezone
 from datetime import datetime
 from django.utils.timezone import now
+from django.utils.dateparse import parse_datetime
 
 @login_required
 def home(request):
@@ -94,10 +95,18 @@ def edit(request, id):
     task = get_object_or_404(Task, id=id, user=request.user)
     
     new_label = request.POST.get('label')
+    new_due_date = request.POST.get('due_date')
 
     if new_label:
         task.label = new_label
         task.save()
+
+    if new_due_date:
+        parsed_date = parse_datetime(new_due_date)
+        if parsed_date:
+            task.due_date = parsed_date
+    
+    task.save()
 
     return redirect('home')
 
