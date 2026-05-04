@@ -17,7 +17,7 @@
         {% if request.user.is_authenticated %}
         <div class="user-bar">
             <span class="user-info">
-                Olá, <strong>{{ request.user.username }}</strong>
+                Olá, <strong>{{ request.user.first_name|default:request.user.username }}</strong>
             </span>
             <form method="POST" action="{% url 'logout' %}">
                 {% csrf_token %}
