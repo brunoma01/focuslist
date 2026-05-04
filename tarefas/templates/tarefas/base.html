@@ -14,17 +14,17 @@
     <div class="container">
         <h1 class="title">FocusList</h1>
         <p class="date">Foque no que importa.</p>
-        {% if request.user.is_authenticated %}
-        <div class="user-bar">
-            <span class="user-info">
-                Olá, <strong>{{ request.user.first_name|default:request.user.username }} 👋</strong>
-            </span>
-            <form method="POST" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
-        </div>
-{% endif %}
+        {% if request.user.is_authenticated and request.path != '/login/' and request.path != '/register/' %}
+            <div class="user-bar">
+                <span class="user-info">
+                    Olá, <strong>{{ request.user.first_name|default:request.user.username }} 👋</strong>
+                </span>
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </div>
+        {% endif %}
 
         {% block body %}
         {% endblock %}
