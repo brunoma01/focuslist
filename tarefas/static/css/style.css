@@ -259,7 +259,15 @@ body {
     border-radius: 6px;
     padding: 10px;
     color: #d1d5db;
-    font-size: 14px;
+    font-size: 16px;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 45px;
+    box-sizing: border-box;
+}
+
+.task-form input[type="datetime-local"]::-webkit-date-and-time-value {
+    text-align: left;
 }
 
 .task-form input[type="datetime-local"]::-webkit-calendar-picker-indicator {
