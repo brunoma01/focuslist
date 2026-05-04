@@ -20,7 +20,7 @@
 
     <div class="due-date-row">
         <label for="due_date">Data limite:</label>
-        <input name="due_date" type="datetime-local" id="due_date" />
+        <input name="due_date" type="datetime-local" id="due_date" required />
     </div>
     <button type="submit">Adicionar</button>
 </form>
@@ -60,14 +60,18 @@
 
             {% if task.due_date %}
                 <small class="task-date">
-                    vence em: {{ task.due_date|date:"d/m/Y H:i" }}
+                    vence em: {{ task.due_date|date:"D, d/m H:i" }}
                 </small>
-            {% endif %}
 
-            {% if task.due_date and task.due_date < now and not task.done %}
-                <small class="task-date overdue-text" style="color: #ef4444;">
-                    (atrasada)
-                </small>
+                {% if not task.done %}
+                    {% if task.due_date.date < today %}
+                        <span class="badge overdue">🔴 Atrasada</span>
+                    {% elif task.due_date.date == today %}
+                        <span class="badge today">🟡 Hoje</span>
+                    {% elif task.due_date.date == tomorrow %}
+                        <span class="badge tomorrow">🔵 Amanhã</span>
+                    {% endif %}
+                {% endif %}
             {% endif %}
 
             <!-- Edit tasks -->
@@ -75,6 +79,7 @@
             <form method="POST" action="{% url 'edit' task.id %}" class="edit-form hidden">
                 {% csrf_token %}
                 <input type="text" name="label" value="{{ task.label }}" class="edit-input" required />
+                <input type="datetime-local" name="due_date" value="{{ task.due_date|date:'Y-m-d\\TH:i' }}" class="edit-input" required />
                 <button type="submit" hidden></button>
             </form>
 
@@ -98,6 +103,6 @@
 <p class="footer">faltam {{ remaining }} tarefa{% if remaining != 1 %}s{% endif %} • Bora!!</p>
 <p class="createby">by Bruno Machado</p>
 {% else %}
-<p class="footer">Nenhuma tarefa pendente.</p>
+<p class="footer">Nenhuma tarefa ainda. Comece adicionando sua primeira!</p>
 {% endif %}
 {% endblock %}

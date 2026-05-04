@@ -13,7 +13,7 @@ from django.utils.timezone import now
 @login_required
 def home(request):
     filter_type = request.GET.get('filter', 'all')
-    all_tasks = Task.objects.filter(user=request.user).order_by('-id')
+    all_tasks = Task.objects.filter(user=request.user).order_by('due_date')
     tasks = all_tasks
 
     if filter_type == 'done':
@@ -32,6 +32,9 @@ def home(request):
 
     pct = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 0
 
+    today = timezone.localdate()
+    tomorrow = today + timezone.timedelta(days=1)
+
     return render(request, 'tarefas/home.html', {
         'tasks': tasks,
         'total': total_tasks,
@@ -41,6 +44,8 @@ def home(request):
         'filter': filter_type,
         'now': timezone.now(),
         'overdue_count': overdue_count,
+        'today': today,
+        'tomorrow': tomorrow,
     })
 
 @require_POST
