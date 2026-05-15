@@ -104,6 +104,8 @@ def edit(request, id):
     if new_due_date:
         parsed_date = parse_datetime(new_due_date)
         if parsed_date:
+            if timezone.is_naive(parsed_date):
+                parsed_date = timezone.make_aware(parsed_date)
             task.due_date = parsed_date
     
     task.save()
